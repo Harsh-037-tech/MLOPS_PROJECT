@@ -1,9 +1,18 @@
 import tensorflow as tf
+import os
+
+DATASET_PATH = "dataset"
+
+# If full dataset not present → use sample dataset
+if not os.path.exists(DATASET_PATH):
+    print("Using SAMPLE dataset for CI")
+    DATASET_PATH = "dataset_sample"
+
 
 def get_train_val():
 
     train_data = tf.keras.preprocessing.image_dataset_from_directory(
-        "dataset/Train",
+        f"{DATASET_PATH}/Train",
         validation_split=0.2,
         subset="training",
         seed=42,
@@ -13,7 +22,7 @@ def get_train_val():
     )
 
     val_data = tf.keras.preprocessing.image_dataset_from_directory(
-        "dataset/Train",
+        f"{DATASET_PATH}/Train",
         validation_split=0.2,
         subset="validation",
         seed=42,
@@ -24,10 +33,11 @@ def get_train_val():
 
     return train_data, val_data
 
+
 def get_test():
 
     test_data = tf.keras.preprocessing.image_dataset_from_directory(
-        "dataset/Test",
+        f"{DATASET_PATH}/Test",
         image_size=(224,224),
         batch_size=1,
         shuffle=False,
